@@ -16,6 +16,7 @@ The API lives at `/api`. Interactive docs: `/docs` and `/redoc`.
 ## Project layout
 
 - `app/main.py` – FastAPI app setup and router inclusion
+- `app/api/routes/health.py` – Health endpoint
 - `app/api/routes` – Route definitions
 - `app/services/json_db.py` – JSON-backed storage service
 - `app/schemas` – Request/response schemas
