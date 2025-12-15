@@ -63,17 +63,17 @@ jobs:
 
       - name: Install dependencies and restart service
         run: |
-          sshpass -p "$DEPLOY_PASSWORD" ssh -p "${DEPLOY_PORT}" "${DEPLOY_USER}@${DEPLOY_HOST}" << 'EOF'
-          set -e
+          sshpass -p "$DEPLOY_PASSWORD" ssh -p "${DEPLOY_PORT}" "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -s" << 'EOF'
+          set -euo pipefail
           cd "${DEPLOY_PATH}"
           python3 -m venv .venv || true
-          source .venv/bin/activate
+          . .venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements.txt
           # Stop existing uvicorn process if running
           pkill -f "uvicorn app.main:app" || true
           # Start uvicorn in background (adjust port as needed)
-          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 >/tmp/crud-server.log 2>&1 &
+          nohup .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 >/tmp/crud-server.log 2>&1 &
           EOF
 
 
