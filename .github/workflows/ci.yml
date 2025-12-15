@@ -63,8 +63,10 @@ jobs:
 
       - name: Install dependencies and restart service
         run: |
-          sshpass -p "$DEPLOY_PASSWORD" ssh -p "${DEPLOY_PORT}" "${DEPLOY_USER}@${DEPLOY_HOST}" "bash -s" << 'EOF'
+          sshpass -p "$DEPLOY_PASSWORD" ssh -p "${DEPLOY_PORT}" "${DEPLOY_USER}@${DEPLOY_HOST}" "DEPLOY_PATH=\"${DEPLOY_PATH}\" bash -s" << 'EOF'
           set -euo pipefail
+          : "${DEPLOY_PATH:?DEPLOY_PATH not set}"
+          mkdir -p "${DEPLOY_PATH}"
           cd "${DEPLOY_PATH}"
           python3 -m venv .venv || true
           . .venv/bin/activate
